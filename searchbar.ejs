@@ -1,0 +1,43 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Bar</title>
+</head>
+<body>
+  <div id="app">
+    <input id="searchbar-space" type="text" name="search_bar" placeholder="Search">
+    <button onclick="search()">Search</button>
+    <div id="imageContainer"></div>
+  </div>
+  <script>
+    // public/script.js
+async function search() {
+  const searchTerm = document.querySelector('#searchbar-space').value;
+
+  try {
+    const response = await fetch(`/search?search_bar=${searchTerm}`);
+    const postData = await response.json();
+    
+    const imageContainer = document.getElementById('imageContainer');
+    imageContainer.innerHTML = '';
+
+    if (postData && postData.title) {
+      const img = document.createElement('img');
+      img.src = postData.image;
+      img.alt = postData.title;
+      imageContainer.appendChild(img);
+    } else {
+      imageContainer.textContent = 'No image found for this title';
+    }
+  } catch (error) {
+    console.error(error);
+    // Handle errors
+  }
+}
+
+  </script>
+</body>
+</html>
